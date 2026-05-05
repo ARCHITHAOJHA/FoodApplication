@@ -1,0 +1,17 @@
+# Root workspace ignores
+
+Foodzz/target/
+Foodzz/.idea/
+Foodzz/*.iml
+Foodzz/src/main/resources/application.properties
+Foodzz/**/.env
+Foodzz/**/.env.*
+
+frontend/node_modules/
+frontend/**/node_modules/
+frontend/**/build/
+frontend/**/.env
+frontend/**/.env.*
+
+*.log
+.DS_Store

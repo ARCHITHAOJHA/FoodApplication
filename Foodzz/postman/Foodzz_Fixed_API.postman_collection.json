@@ -1,0 +1,157 @@
+{
+  "info": {
+    "name": "Foodzz Fixed Flow (Port 5454)",
+    "description": "Auto-saves fresh JWTs and uses them for cart/order/owner endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5454" },
+    { "key": "jwt", "value": "" },
+    { "key": "ownerJwt", "value": "" },
+    { "key": "restaurantId", "value": "1" },
+    { "key": "foodId", "value": "1" },
+    { "key": "cartItemId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "01 - Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/", "host": ["{{baseUrl}}"], "path": [""] }
+      }
+    },
+    {
+      "name": "02 - Signup Customer",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullname\": \"Test Customer\",\n  \"email\": \"testcustomer@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"ROLE_CUSTOMER\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+      }
+    },
+    {
+      "name": "03 - Signin Customer",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"testcustomer@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/auth/signin", "host": ["{{baseUrl}}"], "path": ["auth", "signin"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const data = pm.response.json();",
+              "if (data && data.jwt) {",
+              "  pm.collectionVariables.set('jwt', data.jwt);",
+              "  pm.environment.set('jwt', data.jwt);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Signup Owner",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullname\": \"Test Owner\",\n  \"email\": \"testowner@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"ROLE_RESTAURANT_OWNER\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/auth/signup", "host": ["{{baseUrl}}"], "path": ["auth", "signup"] }
+      }
+    },
+    {
+      "name": "05 - Signin Owner",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"testowner@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/auth/signin", "host": ["{{baseUrl}}"], "path": ["auth", "signin"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const data = pm.response.json();",
+              "if (data && data.jwt) {",
+              "  pm.collectionVariables.set('ownerJwt', data.jwt);",
+              "  pm.environment.set('ownerJwt', data.jwt);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 - Add Item To Cart",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{jwt}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"foodId\": {{foodId}},\n  \"quantity\": 2,\n  \"ingredients\": []\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/cart/add", "host": ["{{baseUrl}}"], "path": ["api", "cart", "add"] }
+      }
+    },
+    {
+      "name": "11 - Get Cart",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{jwt}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/cart", "host": ["{{baseUrl}}"], "path": ["api", "cart"] }
+      }
+    },
+    {
+      "name": "12 - Create Order",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{jwt}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"restaurantId\": {{restaurantId}},\n  \"deliveryAddress\": {}\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/order", "host": ["{{baseUrl}}"], "path": ["api", "order"] }
+      }
+    },
+    {
+      "name": "20 - Owner Create Restaurant",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{ownerJwt}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Owner Kitchen\",\n  \"description\": \"Fresh food\",\n  \"cuisineType\": \"Indian\",\n  \"address\": {},\n  \"contactInformation\": {\n    \"email\": \"owner@foodzz.com\",\n    \"mobile\": \"9999999999\",\n    \"twitter\": \"@owner\",\n    \"instagram\": \"@owner\"\n  },\n  \"openingHours\": \"10AM - 11PM\",\n  \"images\": [\"https://picsum.photos/300\"]\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/admin/restaurants", "host": ["{{baseUrl}}"], "path": ["api", "admin", "restaurants"] }
+      }
+    }
+  ]
+}
+

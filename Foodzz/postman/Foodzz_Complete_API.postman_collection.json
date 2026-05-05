@@ -1,0 +1,467 @@
+{
+  "info": {
+    "name": "Foodzz - Food Delivery App",
+    "description": "Complete API testing collection for Foodzz food delivery application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5454" },
+    { "key": "jwt", "value": "" },
+    { "key": "ownerJwt", "value": "" },
+    { "key": "adminJwt", "value": "" },
+    { "key": "restaurantId", "value": "1" },
+    { "key": "foodId", "value": "1" },
+    { "key": "cartItemId", "value": "1" },
+    { "key": "orderId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Sign Up - Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullname\": \"John Doe\",\n  \"email\": \"customer@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"ROLE_CUSTOMER\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/auth/signup",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "5454",
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sign Up - Restaurant Owner",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                              "mode": "raw",
+                              "raw": "{\n  \"email\": \"customer@example.com\",\n  \"password\": \"password123\"\n}"
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/auth/signin",
+                              "protocol": "http",
+                              "host": ["localhost"],
+                              "port": "5454",
+                              "path": ["auth", "signin"]
+                            },
+                            "event": [
+                              {
+                                "listen": "test",
+                                "script": {
+                                  "type": "text/javascript",
+                                  "exec": [
+                                    "const data = pm.response.json();",
+                                    "if (data && data.jwt) {",
+                                    "  pm.collectionVariables.set('jwt', data.jwt);",
+                                    "  pm.environment.set('jwt', data.jwt);",
+                                    "}"
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "name": "Sign In - Restaurant Owner",
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                "key": "Content-Type",
+                              "raw": "{\n  \"email\": \"owner@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/auth/signup",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "5454",
+              "path": [
+                "auth",
+                                    "  pm.environment.set('ownerJwt', data.jwt);",
+              ]
+            }
+          }
+        },
+        {
+                            ,
+                            "url": {
+                              "raw": "{{baseUrl}}/auth/signin",
+                              "protocol": "http",
+                              "host": ["localhost"],
+                              "port": "5454",
+                              "path": ["auth", "signin"]
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"owner@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signin",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "signin"]
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "const data = pm.response.json();",
+                    "if (data && data.jwt) {",
+                    "  pm.collectionVariables.set('ownerJwt', data.jwt);",
+                    "  pm.environment.set('ownerJwt', data.jwt);",
+                    "}"
+                  ]
+                }
+              }
+            ]
+              "path": [
+                "auth",
+                "signin"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/profile",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Restaurants",
+      "item": [
+        {
+          "name": "Get All Restaurants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/restaurants",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "restaurants"]
+            }
+          }
+        },
+        {
+          "name": "Get Restaurant By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/restaurants/1",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "restaurants", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Restaurant (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerJwt}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pizza Palace\",\n  \"description\": \"Best Italian pizzas in town\",\n  \"cuisineType\": \"Italian\",\n  \"address\": \"123 Main Street\",\n  \"contactInformation\": {\n    \"email\": \"pizzapalace@example.com\",\n    \"mobile\": \"+1234567890\"\n  },\n  \"openingHours\": \"10:00-22:00\",\n  \"registrationDate\": \"2026-04-15T00:00:00\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/restaurants",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "restaurants"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Food Items",
+      "item": [
+        {
+          "name": "Get All Food",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/food/search",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "food", "search"]
+            }
+          }
+        },
+        {
+          "name": "Create Food Item (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerJwt}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Margherita Pizza\",\n  \"description\": \"Fresh mozzarella and basil\",\n  \"price\": 12.99,\n  \"category\": \"Italian\",\n  \"vegetarian\": true,\n  \"seasonal\": false,\n  \"images\": [\"https://example.com/pizza.jpg\"],\n  \"ingredients\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/food",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "food"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cart Management",
+      "item": [
+        {
+          "name": "Get Cart",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            }
+          }
+        },
+        {
+          "name": "Add Item to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"foodId\": 1,\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/add",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "add"]
+            }
+          }
+        },
+        {
+          "name": "Update Cart Item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cartItemId\": 1,\n  \"quantity\": 3\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/update",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "update"]
+            }
+          }
+        },
+        {
+          "name": "Remove Cart Item",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/item/1",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "item", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": {{restaurantId}},\n  \"deliveryAddress\": {}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/order",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "order"]
+            }
+          }
+        },
+        {
+          "name": "Get User Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/order/user",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "order", "user"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/category",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "category"]
+            }
+          }
+        },
+        {
+          "name": "Create Category (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminJwt}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Italian\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/category",
+              "protocol": "http",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "category"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+

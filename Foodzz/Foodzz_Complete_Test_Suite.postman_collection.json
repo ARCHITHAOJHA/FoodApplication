@@ -1,0 +1,845 @@
+{
+  "info": {
+    "_postman_id": "foodzz-api-v1",
+    "name": "Foodzz API - Complete Test Suite",
+    "description": "Complete API testing suite for Food Delivery Application\nBase URL: https://localhost:5454",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. AUTHENTICATION",
+      "item": [
+        {
+          "name": "1.1 Register New Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('customer_jwt', jsonData.jwt);",
+                  "    pm.environment.set('customer_role', jsonData.role);",
+                  "    console.log('✅ Customer JWT saved: ' + jsonData.jwt.substring(0, 20) + '...');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullname\": \"John Customer\",\n  \"email\": \"customer@foodzz.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"ROLE_CUSTOMER\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/auth/signup",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["auth", "signup"]
+            }
+          }
+        },
+        {
+          "name": "1.2 Register Restaurant Owner",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('owner_jwt', jsonData.jwt);",
+                  "    pm.environment.set('owner_role', jsonData.role);",
+                  "    console.log('✅ Owner JWT saved: ' + jsonData.jwt.substring(0, 20) + '...');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullname\": \"Restaurant Owner\",\n  \"email\": \"owner@foodzz.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"ROLE_RESTAURANT_OWNER\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/auth/signup",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["auth", "signup"]
+            }
+          }
+        },
+        {
+          "name": "1.3 Login Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('customer_jwt', jsonData.jwt);",
+                  "    console.log('✅ Customer logged in successfully');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@foodzz.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/auth/signin",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["auth", "signin"]
+            }
+          }
+        },
+        {
+          "name": "1.4 Login Restaurant Owner",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('owner_jwt', jsonData.jwt);",
+                  "    console.log('✅ Owner logged in successfully');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"owner@foodzz.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/auth/signin",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["auth", "signin"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. USER PROFILE",
+      "item": [
+        {
+          "name": "2.1 Get Customer Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer_jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5454/api/users/profile",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "users", "profile"]
+            }
+          }
+        },
+        {
+          "name": "2.2 Get Owner Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{owner_jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5454/api/users/profile",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "users", "profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. RESTAURANTS",
+      "item": [
+        {
+          "name": "3.1 Get All Restaurants (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:5454/api/restaurants",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "restaurants"]
+            }
+          }
+        },
+        {
+          "name": "3.2 Create Restaurant (Owner)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('restaurant_id', jsonData.id);",
+                  "    console.log('✅ Restaurant created: ' + jsonData.name);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{owner_jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Taste of India\",\n  \"description\": \"Authentic Indian cuisine\",\n  \"cuisineType\": \"Indian\",\n  \"address\": \"123 Food Street, Downtown\",\n  \"contactInformation\": {\n    \"email\": \"restaurant@foodzz.com\",\n    \"mobile\": \"+91-9876543210\",\n    \"twitter\": \"@tasteofIndia\",\n    \"instagram\": \"tasteofIndia\",\n    \"facebook\": \"tasteofIndia\"\n  },\n  \"openingHours\": \"10:00 AM - 11:00 PM\",\n  \"registrationDate\": \"2026-01-01\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/api/admin/restaurants",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "admin", "restaurants"]
+            }
+          }
+        },
+        {
+          "name": "3.3 Get Restaurant by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:5454/api/restaurants/{{restaurant_id}}",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "restaurants", "{{restaurant_id}}"]
+            }
+          }
+        },
+        {
+          "name": "3.4 Update Restaurant (Owner)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{owner_jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Taste of India - Updated\",\n  \"description\": \"Best Authentic Indian cuisine in town\",\n  \"cuisineType\": \"Indian\",\n  \"address\": \"124 Food Street, Downtown\",\n  \"contactInformation\": {\n    \"email\": \"restaurant@foodzz.com\",\n    \"mobile\": \"+91-9876543210\"\n  },\n  \"openingHours\": \"10:00 AM - 12:00 AM\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/api/admin/restaurants/{{restaurant_id}}",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "admin", "restaurants", "{{restaurant_id}}"]
+            }
+          }
+        },
+        {
+          "name": "3.5 Get Owner's Restaurant",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{owner_jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5454/api/admin/restaurants/user",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "admin", "restaurants", "user"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. FOOD ITEMS",
+      "item": [
+        {
+          "name": "4.1 Create Food Item (Owner)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('food_id', jsonData.id);",
+                  "    console.log('✅ Food item created: ' + jsonData.name);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{owner_jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Tender chicken in creamy tomato sauce\",\n  \"price\": 350.00,\n  \"category\": \"Main Course\",\n  \"images\": [\"https://example.com/butter-chicken.jpg\"],\n  \"isVegetarian\": false,\n  \"isAvailable\": true,\n  \"restaurantId\": \"{{restaurant_id}}\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/api/admin/food",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "admin", "food"]
+            }
+          }
+        },
+        {
+          "name": "4.2 Get All Food Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:5454/api/food",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "food"]
+            }
+          }
+        },
+        {
+          "name": "4.3 Get Food by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:5454/api/food/{{food_id}}",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "food", "{{food_id}}"]
+            }
+          }
+        },
+        {
+          "name": "4.4 Update Food Item (Owner)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{owner_jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Butter Chicken - Premium\",\n  \"description\": \"Premium tender chicken in creamy tomato sauce\",\n  \"price\": 400.00,\n  \"isAvailable\": true\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/api/admin/food/{{food_id}}",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "admin", "food", "{{food_id}}"]
+            }
+          }
+        },
+        {
+          "name": "4.5 Delete Food Item (Owner)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{owner_jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5454/api/admin/food/{{food_id}}",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "admin", "food", "{{food_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. CART",
+      "item": [
+        {
+          "name": "5.1 Get Cart (Customer)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer_jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5454/api/cart",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "cart"]
+            }
+          }
+        },
+        {
+          "name": "5.2 Add Item to Cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    console.log('✅ Item added to cart');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer_jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"foodId\": 1,\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/api/cart/add",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "cart", "add"]
+            }
+          }
+        },
+        {
+          "name": "5.3 Update Cart Item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer_jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cartItemId\": 1,\n  \"quantity\": 3\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/api/cart/update",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "cart", "update"]
+            }
+          }
+        },
+        {
+          "name": "5.4 Remove Item from Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer_jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5454/api/cart/item/1",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "cart", "item", "1"]
+            }
+          }
+        },
+        {
+          "name": "5.5 Clear Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer_jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5454/api/cart/clear",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "cart", "clear"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. ORDERS",
+      "item": [
+        {
+          "name": "6.1 Create Order (Customer)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('order_id', jsonData.id);",
+                  "    console.log('✅ Order created: ' + jsonData.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer_jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"{{restaurant_id}}\",\n  \"deliveryAddress\": \"123 Main Street, Apt 4B, City\",\n  \"paymentMethod\": \"RAZORPAY\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/api/order",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "order"]
+            }
+          }
+        },
+        {
+          "name": "6.2 Get Customer Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer_jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5454/api/order/user",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "order", "user"]
+            }
+          }
+        },
+        {
+          "name": "6.3 Get Order Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer_jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5454/api/order/{{order_id}}",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "order", "{{order_id}}"]
+            }
+          }
+        },
+        {
+          "name": "6.4 Get Restaurant Orders (Owner)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{owner_jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5454/api/admin/order/restaurant/{{restaurant_id}}",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "admin", "order", "restaurant", "{{restaurant_id}}"]
+            }
+          }
+        },
+        {
+          "name": "6.5 Update Order Status (Owner)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{owner_jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderStatus\": \"PREPARING\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/api/admin/order/{{order_id}}",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "admin", "order", "{{order_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. PAYMENT (RAZORPAY)",
+      "item": [
+        {
+          "name": "7.1 Create Payment Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer_jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{order_id}}\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/api/payment/{{order_id}}",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "payment", "{{order_id}}"]
+            }
+          }
+        },
+        {
+          "name": "7.2 Verify Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customer_jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpayPaymentId\": \"pay_xxxxxxxxxxxx\",\n  \"razorpayOrderId\": \"order_xxxxxxxxxxxx\",\n  \"razorpaySignature\": \"signature_xxxxxxxxxxxx\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/api/payment/verify",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "payment", "verify"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. CATEGORIES & INGREDIENTS",
+      "item": [
+        {
+          "name": "8.1 Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:5454/api/category",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "category"]
+            }
+          }
+        },
+        {
+          "name": "8.2 Get Ingredients for Restaurant",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{owner_jwt}}"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5454/api/admin/ingredients/restaurant/{{restaurant_id}}",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "admin", "ingredients", "restaurant", "{{restaurant_id}}"]
+            }
+          }
+        },
+        {
+          "name": "8.3 Create Ingredient Category (Owner)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{owner_jwt}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Spices\",\n  \"restaurantId\": \"{{restaurant_id}}\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5454/api/admin/ingredients/category",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5454",
+              "path": ["api", "admin", "ingredients", "category"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Setup environment variables",
+          "if (!pm.environment.has('base_url')) {",
+          "    pm.environment.set('base_url', 'https://localhost:5454');",
+          "}"
+        ]
+      }
+    }
+  ]
+}
+

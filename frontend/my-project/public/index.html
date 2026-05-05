@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
+      (function () {
+        function showRuntimeError(message) {
+          var el = document.getElementById('runtime-error-overlay');
+          if (!el) {
+            el = document.createElement('pre');
+            el.id = 'runtime-error-overlay';
+            el.style.position = 'fixed';
+            el.style.left = '0';
+            el.style.right = '0';
+            el.style.bottom = '0';
+            el.style.maxHeight = '40vh';
+            el.style.margin = '0';
+            el.style.padding = '12px';
+            el.style.overflow = 'auto';
+            el.style.background = '#2b0d0d';
+            el.style.color = '#ffdede';
+            el.style.font = '12px/1.4 monospace';
+            el.style.zIndex = '999999';
+            document.body.appendChild(el);
+          }
+          el.textContent = '[Runtime Error]\n' + message;
+        }
+
+        window.addEventListener('error', function (event) {
+          showRuntimeError((event.error && event.error.stack) || event.message || 'Unknown error');
+        });
+
+        window.addEventListener('unhandledrejection', function (event) {
+          var reason = event.reason;
+          showRuntimeError((reason && reason.stack) || String(reason));
+        });
+      })();
+    </script>
+  </body>
+</html>
+

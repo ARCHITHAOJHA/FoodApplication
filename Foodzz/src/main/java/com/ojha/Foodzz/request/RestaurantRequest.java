@@ -1,0 +1,22 @@
+package com.ojha.Foodzz.request;
+
+import com.ojha.Foodzz.model.Address;
+import com.ojha.Foodzz.model.ContactInformation;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Data
+public class RestaurantRequest {
+
+    private Long id;
+    private String name;
+    private String description;
+    private String cuisineType;
+    private Address address;
+    private ContactInformation contactInformation;
+    private String openingHours;
+    private List<String> images;
+
+}
